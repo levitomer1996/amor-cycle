@@ -1,4 +1,6 @@
-import { SET_LOGGED } from "./types";
-export const setLogged = function setIsLoggedIn(isLoggedIn, isAdmin, userName) {
-  return { type: SET_LOGGED, payload: [isLoggedIn, isAdmin, userName] };
+export const SET_LOGIN = (username, isAdmin, isLogged) => {
+  return {
+    type: "SET_LOGIN",
+    payload: [username, isAdmin, isLogged],
+  };
 };

@@ -10,16 +10,18 @@ import { Link } from "react-router-dom";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import InstagramIcon from "@material-ui/icons/Instagram";
 import { Redirect } from "react-router-dom";
-
-import {
-  sections,
-  useStyles,
-  renderRedirect,
-  renderUserPanel,
-} from "./Header.module";
-
+import { sections, useStyles, renderRedirect } from "./Header.module";
+//redux
 import { connect } from "react-redux";
-import { setLogged } from "../../redux/actions/userActions";
+import { SET_LOGIN } from "../../redux/actions/userActions";
+
+function renderUserPanel(registerButton, isLogged, username) {
+  if (!isLogged) {
+    return registerButton;
+  } else {
+    return <h1>{username}</h1>;
+  }
+}
 
 function Header(props) {
   const classes = useStyles();
@@ -30,7 +32,7 @@ function Header(props) {
     register: false,
   });
 
-  const signupButton = (
+  const signUpButton = (
     <Button
       variant="outlined"
       size="small"
@@ -42,9 +44,22 @@ function Header(props) {
     </Button>
   );
 
+  const userButton = (user) => (
+    <Button variant="outlined" size="small">
+      {user}
+    </Button>
+  );
+
+  const [userState] = useState({
+    isLoggedIn: props.isLoggedIn,
+    isAdmin: props.isAdmin,
+    username: props.username,
+  });
+
   return (
     <React.Fragment>
       {renderRedirect(redirect)}
+      {console.log(props)}
       <Toolbar className={classes.toolbar}>
         <Typography
           component="h2"
@@ -65,7 +80,12 @@ function Header(props) {
         <IconButton>
           <SearchIcon />
         </IconButton>
-        {renderUserPanel(props.isLoggedIn, signupButton)}
+        {renderUserPanel(
+          signUpButton,
+
+          props.isLogged,
+          userButton(props.username)
+        )}
       </Toolbar>
       <Button
         size="small"
@@ -103,9 +123,9 @@ Header.propTypes = {
 
 export default connect(
   (state) => ({
-    isLoggedIn: state.isLoggedIn,
-    username: state.username,
+    isLogged: state.isLogged,
     isAdmin: state.isAdmin,
+    username: state.username,
   }),
-  { setLogged }
+  { SET_LOGIN }
 )(Header);

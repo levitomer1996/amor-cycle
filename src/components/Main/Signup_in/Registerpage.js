@@ -12,6 +12,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
+import { baseUrl } from "../../../serverURL";
 import Alert from "@material-ui/lab/Alert";
 import {
   useStyles,
@@ -45,22 +46,33 @@ function renderRedirect(redirect) {
   }
 }
 
+function renderRedirectToSignin(redirect) {
+  if (redirect) {
+    return <Redirect to="/signin" />;
+  } else {
+    return;
+  }
+}
+
 export default function Registerpage() {
   const classes = useStyles();
   const [redirect, setRedirect] = useState(false);
+  const [redirectToSignInState, setRedirectToSignIn] = useState(false);
   const [Spinner, setSpinner] = useState(false);
-  const [Alert, setAlert] = useState({ isError: false, message: [] });
+  const [Alert, setAlertState] = useState({ isError: false, message: [] });
 
   const [formState, setFormState] = useState({
     f_name: "",
     l_name: "",
     email: "",
     password: "",
+    isAdmin: false,
   });
 
   return (
     <Container component="main" maxWidth="xs">
       {renderRedirect(redirect)}
+      {renderRedirectToSignin(redirectToSignInState)}
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -73,9 +85,10 @@ export default function Registerpage() {
           className={classes.form}
           noValidate
           onSubmit={async (e) => {
+            console.log(formState);
             e.preventDefault();
             setSpinner(true);
-            await fetch("http://localhost:3000/auth/signup", {
+            await fetch(`${baseUrl}/auth/signup`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -90,26 +103,26 @@ export default function Registerpage() {
 
                 if (jsonedData.statusCode == 400) {
                   setSpinner(false);
-                  setAlert({
+                  setAlertState({
                     isError: true,
                     message: jsonedData.message,
                   });
 
                   setTimeout(() => {
-                    setAlert({
+                    setAlertState({
                       isError: false,
                       message: [],
                     });
                   }, 3000);
                 } else if (jsonedData.code === "23505") {
                   setSpinner(false);
-                  setAlert({
+                  setAlertState({
                     isError: true,
                     message: [`${formState.email} is already exist`],
                   });
 
                   setTimeout(() => {
-                    setAlert({
+                    setAlertState({
                       isError: false,
                       message: [],
                     });
@@ -142,6 +155,7 @@ export default function Registerpage() {
                     l_name: formState.l_name,
                     email: formState.email,
                     password: formState.password,
+                    isAdmin: false,
                   })
                 }
               />
@@ -161,6 +175,7 @@ export default function Registerpage() {
                     l_name: e.target.value,
                     email: formState.email,
                     password: formState.password,
+                    isAdmin: false,
                   })
                 }
               />
@@ -180,6 +195,7 @@ export default function Registerpage() {
                     l_name: formState.l_name,
                     email: e.target.value,
                     password: formState.password,
+                    isAdmin: false,
                   })
                 }
               />
@@ -200,6 +216,7 @@ export default function Registerpage() {
                     l_name: formState.l_name,
                     email: formState.email,
                     password: e.target.value,
+                    isAdmin: false,
                   })
                 }
               />
@@ -218,9 +235,25 @@ export default function Registerpage() {
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="/signin" variant="body2">
+              {/* <Link
+                onClick={() => {
+                  return <Redirect to="/signin" />;
+                }}
+                variant="body2"
+              >
                 Already have an account? Sign in
-              </Link>
+              </Link> */}
+              <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+                onClick={() => {
+                  setRedirectToSignIn(true);
+                }}
+              >
+                Already have an acount?
+              </Button>
             </Grid>
           </Grid>
         </form>

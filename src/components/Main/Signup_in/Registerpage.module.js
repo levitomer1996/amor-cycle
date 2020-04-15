@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
+import { baseUrl } from "../../../serverURL";
 
 //Styling the page
 export const useStyles = makeStyles((theme) => ({
@@ -44,7 +45,7 @@ export function Copyright() {
 export async function handleSubmit(e, state) {
   e.preventDefault();
 
-  fetch("http://localhost:3000/auth/signup", {
+  fetch(`${baseUrl}/auth/signup`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

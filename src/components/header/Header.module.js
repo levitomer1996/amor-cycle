@@ -1,6 +1,6 @@
 import { makeStyles } from "@material-ui/core/styles";
 import { Redirect } from "react-router-dom";
-import React from "react";
+import React, { useState } from "react";
 
 //Header redirects
 export const sections = [
@@ -43,15 +43,6 @@ export function renderRedirect(redirect) {
     return <Redirect to="/contact" />;
   } else if (redirect.register) {
     return <Redirect to="/signup" />;
-  } else {
-    return;
-  }
-}
-
-export function renderUserPanel(isLogged, signUpButton) {
-  console.log(isLogged);
-  if (!isLogged) {
-    return signUpButton;
   } else {
     return;
   }

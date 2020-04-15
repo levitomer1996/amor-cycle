@@ -1,6 +1,6 @@
 {
   "name": "sharon-blog",
-  "homepage": "",
+  "homepage": "http://amor-cycle.s3-website-eu-west-1.amazonaws.com",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
