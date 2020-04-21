@@ -1,6 +1,8 @@
 import { makeStyles } from "@material-ui/core/styles";
 import React from "react";
+import { baseUrl } from "../../../serverURL";
 
+//Article page styling.
 export const useStyles = makeStyles((theme) => ({
   title: {
     fontFamily: "Comic Sans MS",
@@ -28,3 +30,9 @@ export const useStyles = makeStyles((theme) => ({
     backgroundColor: "#0be8082e",
   },
 }));
+
+export function getArticles(category) {
+  fetch(`${baseUrl}/article/${category}`).then((res) => {
+    return res.json();
+  });
+}

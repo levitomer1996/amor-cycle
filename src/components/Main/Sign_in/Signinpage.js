@@ -103,7 +103,7 @@ function SignIn(props) {
                   }, 3000);
                 } else {
                   sessionStorage.setItem("at", res.accessToken);
-                  SET_LOGIN(formState.email, true, false);
+                  SET_LOGIN(formState.email, false, true);
                   setRedirectState(true);
                 }
               })

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import Toolbar from "@material-ui/core/Toolbar";
@@ -10,7 +10,12 @@ import { Link } from "react-router-dom";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import InstagramIcon from "@material-ui/icons/Instagram";
 import { Redirect } from "react-router-dom";
-import { sections, useStyles, renderRedirect } from "./Header.module";
+import {
+  sections,
+  useStyles,
+  renderRedirect,
+  validateToken,
+} from "./Header.module";
 //redux
 import { connect } from "react-redux";
 import { SET_LOGIN } from "../../redux/actions/userActions";
@@ -23,14 +28,34 @@ function renderUserPanel(registerButton, isLogged, username) {
   }
 }
 
+async function fetchUser(token) {
+  if (!token) {
+    return;
+  } else {
+    try {
+      let fetchedUser = await validateToken(token);
+      console.log(fetchUser);
+      return fetchedUser;
+    } catch (error) {}
+  }
+}
+
 function Header(props) {
   const classes = useStyles();
+  //States
   const { title } = props;
   const [redirect, setRedirect] = useState({
     about: false,
     contact: false,
     register: false,
   });
+  const [userState] = useState({
+    isLoggedIn: props.isLoggedIn,
+    isAdmin: props.isAdmin,
+    username: props.username,
+  });
+
+  const [isFetched, setIsFetched] = useState(false);
 
   const signUpButton = (
     <Button
@@ -50,16 +75,10 @@ function Header(props) {
     </Button>
   );
 
-  const [userState] = useState({
-    isLoggedIn: props.isLoggedIn,
-    isAdmin: props.isAdmin,
-    username: props.username,
-  });
-
   return (
     <React.Fragment>
       {renderRedirect(redirect)}
-      {console.log(props)}
+
       <Toolbar className={classes.toolbar}>
         <Typography
           component="h2"

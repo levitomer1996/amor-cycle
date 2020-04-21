@@ -1,7 +1,7 @@
 const initialState = {
   isLoggedIn: false,
   username: "",
-  isAdmin: false,
+  isAdmin: true,
 };
 
 function reducer(state = initialState, action) {
@@ -12,6 +12,8 @@ function reducer(state = initialState, action) {
         username: action.payload[0],
         isLogged: action.payload[1],
         isAdmin: action.payload[2],
+        f_name: action.payload[3],
+        l_name: action.payload[4],
       };
 
     default:
