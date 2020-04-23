@@ -6,9 +6,12 @@ import IconButton from "@material-ui/core/IconButton";
 import SendIcon from "@material-ui/icons/Send";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import { baseUrl } from "../../../../serverURL";
+import { token } from "../../../../token";
 
 function AddArticle(props) {
   //States
@@ -22,7 +25,7 @@ function AddArticle(props) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        // 'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: token,
       },
       body: JSON.stringify(formState),
     })
@@ -30,18 +33,43 @@ function AddArticle(props) {
         return res.json();
       })
       .then((data) => {
-        console.log(data);
+        if (data.statusCode === 401) {
+          setAlertState({ isError: true, message: data.message });
+          setTimeout(() => {
+            setAlertState({ isError: false, message: "" });
+          }, 3000);
+        }
       });
   }
-
+  //States
   const [formState, setFormState] = useState({
     title: "",
     category: "",
     img: "",
     content: "",
   });
+  //Alert State
+  const [alertState, setAlertState] = useState({ isError: false, message: "" });
+  //Alert
+  function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
+
+  function renderAlert() {
+    if (alertState.isError) {
+      return (
+        <Snackbar open={alertState.isError}>
+          <Alert severity="error">{alertState.message}</Alert>
+        </Snackbar>
+      );
+    } else {
+      return;
+    }
+  }
+
   //Styles
   const classes = useStyles();
+
   return (
     <div>
       <form
@@ -121,6 +149,7 @@ function AddArticle(props) {
             });
           }}
         />
+        {renderAlert()}
         <IconButton colorSecondary type="submit">
           Add article
           <SendIcon fontSize="large" color="primary" />

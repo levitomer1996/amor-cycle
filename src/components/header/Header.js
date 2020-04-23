@@ -16,29 +16,12 @@ import {
   renderRedirect,
   validateToken,
 } from "./Header.module";
+import { token } from "../../token";
+
 //redux
 import { connect } from "react-redux";
 import { SET_LOGIN } from "../../redux/actions/userActions";
-
-function renderUserPanel(registerButton, isLogged, username) {
-  if (!isLogged) {
-    return registerButton;
-  } else {
-    return <h1>{username}</h1>;
-  }
-}
-
-async function fetchUser(token) {
-  if (!token) {
-    return;
-  } else {
-    try {
-      let fetchedUser = await validateToken(token);
-      console.log(fetchUser);
-      return fetchedUser;
-    } catch (error) {}
-  }
-}
+import { baseUrl } from "../../serverURL";
 
 function Header(props) {
   const classes = useStyles();
@@ -54,6 +37,28 @@ function Header(props) {
     isAdmin: props.isAdmin,
     username: props.username,
   });
+
+  //Checks if users is logged or not.
+  function renderUserPanel(signupButton) {
+    if (!sessionStorage.getItem("at")) {
+      return signupButton;
+    } else {
+      if (!isFetched) {
+        fetch(`${baseUrl}/auth/validatetoken/${sessionStorage.getItem("at")}`)
+          .then((res) => {
+            return res.json();
+          })
+          .then(async (data) => {
+            SET_LOGIN(data.email, false, data.isAdmin);
+            setIsFetched(true);
+            return signupButton;
+          });
+      } else {
+        console.log(props);
+        return userButton(props.username);
+      }
+    }
+  }
 
   const [isFetched, setIsFetched] = useState(false);
 
@@ -85,7 +90,7 @@ function Header(props) {
           variant="h5"
           color="inherit"
           align="left"
-          noWrap
+          // noWrap
           className={classes.toolbarTitle}
         >
           {title}

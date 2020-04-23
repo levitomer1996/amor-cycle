@@ -24,7 +24,7 @@ function App() {
         <React.Fragment>
           <CssBaseline />
           <Container maxWidth="lg">
-            <Header title="Amor-cycle" />
+            <Header title="Amor cycle" />
             <Main />
           </Container>
         </React.Fragment>

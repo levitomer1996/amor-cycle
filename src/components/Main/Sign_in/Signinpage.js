@@ -148,10 +148,7 @@ function SignIn(props) {
             }}
           />
           {renderSpinnerAndError(spinnerState, alertState)}
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
+
           <Button
             type="submit"
             fullWidth
@@ -161,16 +158,8 @@ function SignIn(props) {
             Sign In
           </Button>
           <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
+            <Grid item xs></Grid>
+            <Grid item></Grid>
           </Grid>
         </form>
       </div>
