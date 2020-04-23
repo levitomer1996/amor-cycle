@@ -1,6 +1,6 @@
 {
   "name": "sharon-blog",
-  "homepage": "https://compassionate-hoover-bdb121.netlify.app/",
+  "homepage": "https://compassionate-hoover-bdb121.netlify.app",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
