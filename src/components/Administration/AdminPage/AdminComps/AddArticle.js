@@ -30,6 +30,7 @@ function AddArticle(props) {
       body: JSON.stringify(formState),
     })
       .then((res) => {
+        console.log(formState);
         return res.json();
       })
       .then((data) => {

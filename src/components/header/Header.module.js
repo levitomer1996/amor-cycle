@@ -1,4 +1,6 @@
 import { makeStyles } from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+
 import { Redirect } from "react-router-dom";
 import React, { useState } from "react";
 import { baseUrl } from "../../serverURL";
@@ -43,6 +45,15 @@ export const useStyles = makeStyles((theme) => ({
   toolbarSecondary: {
     justifyContent: "space-evenly",
     overflowX: "auto",
+    [theme.breakpoints.down("sm")]: {
+      display: "none",
+    },
+  },
+  categoryMenu: {
+    display: "none",
+    [theme.breakpoints.down("sm")]: {
+      display: "inline",
+    },
   },
   toolbarLink: {
     padding: theme.spacing(1),
@@ -78,6 +89,10 @@ export function renderRedirect(redirect) {
     return <Redirect to="/contact" />;
   } else if (redirect.register) {
     return <Redirect to="/signup" />;
+  } else if (redirect.adminpage) {
+    return <Redirect to="/ap" />;
+  } else if (redirect.userpage) {
+    return <Redirect to="/userpage" />;
   } else {
     return;
   }

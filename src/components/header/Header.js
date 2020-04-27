@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 import Toolbar from "@material-ui/core/Toolbar";
@@ -9,6 +9,7 @@ import Typography from "@material-ui/core/Typography";
 import { Link } from "react-router-dom";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import InstagramIcon from "@material-ui/icons/Instagram";
+import HeaderMediaCategory from "./HeaderMediaCategory";
 import { Redirect } from "react-router-dom";
 import {
   sections,
@@ -16,6 +17,8 @@ import {
   renderRedirect,
   validateToken,
 } from "./Header.module";
+import "./Header.style.css";
+
 import { token } from "../../token";
 
 //redux
@@ -31,15 +34,13 @@ function Header(props) {
     about: false,
     contact: false,
     register: false,
-  });
-  const [userState] = useState({
-    isLoggedIn: props.isLoggedIn,
-    isAdmin: props.isAdmin,
-    username: props.username,
+    adminpage: false,
+    userPage: false,
   });
 
   //Checks if users is logged or not.
   function renderUserPanel(signupButton) {
+    const { SET_LOGIN } = props;
     if (!sessionStorage.getItem("at")) {
       return signupButton;
     } else {
@@ -48,26 +49,38 @@ function Header(props) {
           .then((res) => {
             return res.json();
           })
-          .then(async (data) => {
-            SET_LOGIN(data.email, false, data.isAdmin);
+          .then((data) => {
+            console.log(data);
+            SET_LOGIN(data.email, data.isAdmin, true, data.f_name, data.l_name);
+
             setIsFetched(true);
             return signupButton;
           });
       } else {
-        console.log(props);
-        return userButton(props.username);
+        if (!props.isAdmin) {
+          return userButton(props.f_name);
+        } else {
+          return adminButton(props.f_name);
+        }
       }
     }
   }
 
   const [isFetched, setIsFetched] = useState(false);
+  const [adminRedirect, setAdminRedirect] = useState(false);
 
   const signUpButton = (
     <Button
       variant="outlined"
       size="small"
       onClick={() =>
-        setRedirect({ about: false, contact: false, register: true })
+        setRedirect({
+          about: false,
+          contact: false,
+          register: true,
+          adminpage: false,
+          userPage: false,
+        })
       }
     >
       Sign up
@@ -76,6 +89,24 @@ function Header(props) {
 
   const userButton = (user) => (
     <Button variant="outlined" size="small">
+      {user}
+    </Button>
+  );
+
+  const adminButton = (user) => (
+    <Button
+      variant="outlined"
+      size="small"
+      onClick={() => {
+        setRedirect({
+          about: false,
+          contact: false,
+          register: false,
+          adminpage: true,
+          userpage: false,
+        });
+      }}
+    >
       {user}
     </Button>
   );
@@ -95,26 +126,35 @@ function Header(props) {
         >
           {title}
         </Typography>
-        <IconButton>
-          <FacebookIcon />
-        </IconButton>
-        <IconButton>
-          <InstagramIcon />
-        </IconButton>
-        <IconButton>
-          <SearchIcon />
-        </IconButton>
+        <div>
+          <IconButton>
+            <FacebookIcon />
+          </IconButton>
+          <IconButton>
+            <InstagramIcon />
+          </IconButton>
+          <IconButton>
+            <SearchIcon />
+          </IconButton>
+        </div>
         {renderUserPanel(
           signUpButton,
 
           props.isLogged,
-          userButton(props.username)
+          userButton(props.username, props.isAdmin)
         )}
       </Toolbar>
+
       <Button
         size="small"
         onClick={() =>
-          setRedirect({ about: true, contact: false, register: false })
+          setRedirect({
+            about: true,
+            contact: false,
+            register: false,
+            adminpage: false,
+            userpage: false,
+          })
         }
       >
         About
@@ -122,10 +162,19 @@ function Header(props) {
       <Button
         size="small"
         onClick={() =>
-          setRedirect({ about: false, contact: true, register: false })
+          setRedirect({
+            about: false,
+            contact: true,
+            register: false,
+            adminpage: false,
+            userpage: false,
+          })
         }
       >
         Contact
+      </Button>
+      <Button className={classes.categoryMenu}>
+        <HeaderMediaCategory sections={sections} />
       </Button>
       <Toolbar
         component="nav"
@@ -150,6 +199,8 @@ export default connect(
     isLogged: state.isLogged,
     isAdmin: state.isAdmin,
     username: state.username,
+    f_name: state.f_name,
+    l_name: state.l_name,
   }),
   { SET_LOGIN }
 )(Header);
