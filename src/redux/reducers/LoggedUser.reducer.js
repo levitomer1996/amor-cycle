@@ -15,7 +15,16 @@ function reducer(state = initialState, action) {
         f_name: action.payload[3],
         l_name: action.payload[4],
       };
-
+    case "SET_LOGOUT":
+      sessionStorage.removeItem("at");
+      return {
+        ...state,
+        username: "",
+        isLogged: "",
+        isAdmin: false,
+        f_name: "",
+        l_name: "",
+      };
     default:
       return state;
   }

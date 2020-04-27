@@ -103,8 +103,9 @@ export default function HeaderMediaCategory(props) {
                     {props.sections.map((sec) => {
                       return (
                         <MenuItem
-                          onClick={() => {
+                          onClick={(e) => {
                             setRedirect({ isRedirect: true, url: sec.url });
+                            handleClose(e);
                           }}
                         >
                           {" "}

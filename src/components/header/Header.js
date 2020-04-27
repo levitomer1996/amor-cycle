@@ -124,9 +124,10 @@ function Header(props) {
           // noWrap
           className={classes.toolbarTitle}
         >
-          {title}
+          <Link to="/" className={classes.toolbarTitle}>
+            {title}
+          </Link>
         </Typography>
-
         <IconButton>
           <FacebookIcon />
         </IconButton>
