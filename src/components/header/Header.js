@@ -126,17 +126,17 @@ function Header(props) {
         >
           {title}
         </Typography>
-        <div>
-          <IconButton>
-            <FacebookIcon />
-          </IconButton>
-          <IconButton>
-            <InstagramIcon />
-          </IconButton>
-          <IconButton>
-            <SearchIcon />
-          </IconButton>
-        </div>
+
+        <IconButton>
+          <FacebookIcon />
+        </IconButton>
+        <IconButton>
+          <InstagramIcon />
+        </IconButton>
+        <IconButton>
+          <SearchIcon />
+        </IconButton>
+
         {renderUserPanel(
           signUpButton,
 
