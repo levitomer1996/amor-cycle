@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Grow from "@material-ui/core/Grow";
@@ -8,6 +8,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
 import { makeStyles } from "@material-ui/core/styles";
 import Link from "@material-ui/core/Link";
+import { Redirect } from "react-router-dom";
+import { render } from "@testing-library/react";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,7 +23,19 @@ const useStyles = makeStyles((theme) => ({
 export default function HeaderMediaCategory(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
+
   const anchorRef = React.useRef(null);
+
+  const [redirect, setRedirect] = useState({ isRedirect: false, url: "" });
+  const renderRedirect = (redirect) => {
+    if (redirect.isRedirect) {
+      const snapshotRedirect = redirect;
+
+      return <Redirect to={snapshotRedirect.url} />;
+    } else {
+      return;
+    }
+  };
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -55,13 +69,14 @@ export default function HeaderMediaCategory(props) {
   return (
     <div className={classes.root}>
       <div>
+        {renderRedirect(redirect)}
         <Button
           ref={anchorRef}
           aria-controls={open ? "menu-list-grow" : undefined}
           aria-haspopup="true"
           onClick={handleToggle}
         >
-          Find article
+          articles
         </Button>
         <Popper
           open={open}
@@ -87,9 +102,13 @@ export default function HeaderMediaCategory(props) {
                   >
                     {props.sections.map((sec) => {
                       return (
-                        <MenuItem onClick={handleClose}>
+                        <MenuItem
+                          onClick={() => {
+                            setRedirect({ isRedirect: true, url: sec.url });
+                          }}
+                        >
                           {" "}
-                          <Link href={sec.url}>{sec.title}</Link>
+                          {sec.title}
                         </MenuItem>
                       );
                     })}

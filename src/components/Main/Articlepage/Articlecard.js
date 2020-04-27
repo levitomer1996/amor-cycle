@@ -14,6 +14,9 @@ export const useStyles = makeStyles((theme) => ({
     boxShadow: "5px 5px 15px rgba(0,0,0,0.9) ",
     textAlign: "center",
     width: "100%",
+    [theme.breakpoints.down("sm")]: {
+      gridTemplateColumns: "100%",
+    },
   },
   cardImage: {
     borderTopLeftRadius: "15px",
