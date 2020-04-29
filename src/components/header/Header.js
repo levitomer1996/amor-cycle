@@ -23,97 +23,109 @@ import { token } from "../../token";
 
 //redux
 import { connect } from "react-redux";
-import { SET_LOGIN } from "../../redux/actions/userActions";
+import { SET_LOGIN, SET_LOGOUT } from "../../redux/actions/userActions";
 import { baseUrl } from "../../serverURL";
 
 function Header(props) {
   const classes = useStyles();
   //States
   const { title } = props;
-  const [redirect, setRedirect] = useState({
-    about: false,
-    contact: false,
-    register: false,
-    adminpage: false,
-    userPage: false,
-  });
 
   //Checks if users is logged or not.
-  function renderUserPanel(signupButton) {
-    const { SET_LOGIN } = props;
+  function renderUserPanel() {
+    const { SET_LOGIN, SET_LOGOUT } = props;
+
     if (!sessionStorage.getItem("at")) {
-      return signupButton;
+      SET_LOGOUT();
+      return (
+        <Button variant="outlined" size="small">
+          <Link to="/signup" style={{ textDecoration: "none", color: "black" }}>
+            Sign-up
+          </Link>
+        </Button>
+      );
     } else {
-      if (!isFetched) {
+      if (!isFetched.isFetched) {
         fetch(`${baseUrl}/auth/validatetoken/${sessionStorage.getItem("at")}`)
           .then((res) => {
             return res.json();
           })
           .then((data) => {
             console.log(data);
-            SET_LOGIN(data.email, data.isAdmin, true, data.f_name, data.l_name);
-
-            setIsFetched(true);
-            return signupButton;
+            if (data.error === "TokenExpiredError") {
+              console.log("error");
+              SET_LOGIN("", "", false, "", "");
+              setIsFetched({ isFetched: true, isError: true });
+              return (
+                <Button variant="outlined" size="small">
+                  <Link
+                    to="/signup"
+                    style={{ textDecoration: "none", color: "black" }}
+                  >
+                    Sign-up
+                  </Link>
+                </Button>
+              );
+            } else {
+              console.log("not Error");
+              SET_LOGIN(
+                data.email,
+                data.isAdmin,
+                true,
+                data.f_name,
+                data.l_name
+              );
+              setIsFetched({ isFetched: true, isError: false });
+              return userButton(data.f_name);
+            }
           });
       } else {
-        if (!props.isAdmin) {
-          return userButton(props.f_name);
+        if (!isFetched.isError) {
+          if (!props.isAdmin) {
+            return userButton(props.f_name);
+          } else {
+            return adminButton(props.f_name);
+          }
         } else {
-          return adminButton(props.f_name);
+          return (
+            <Button variant="outlined" size="small">
+              <Link
+                to="/signup"
+                style={{ textDecoration: "none", color: "black" }}
+              >
+                Sign-up
+              </Link>
+            </Button>
+          );
         }
       }
     }
   }
 
-  const [isFetched, setIsFetched] = useState(false);
+  const [isFetched, setIsFetched] = useState({
+    isFetched: false,
+    isError: false,
+  });
   const [adminRedirect, setAdminRedirect] = useState(false);
-
-  const signUpButton = (
-    <Button
-      variant="outlined"
-      size="small"
-      onClick={() =>
-        setRedirect({
-          about: false,
-          contact: false,
-          register: true,
-          adminpage: false,
-          userPage: false,
-        })
-      }
-    >
-      Sign up
-    </Button>
-  );
 
   const userButton = (user) => (
     <Button variant="outlined" size="small">
-      {user}
+      {user.f_name}
     </Button>
   );
 
   const adminButton = (user) => (
-    <Button
-      variant="outlined"
-      size="small"
-      onClick={() => {
-        setRedirect({
-          about: false,
-          contact: false,
-          register: false,
-          adminpage: true,
-          userpage: false,
-        });
-      }}
-    >
-      {user}
+    <Button variant="outlined" size="small">
+      <Link to="/ap" style={{ textDecoration: "none", color: "black" }}>
+        {" "}
+        {user}
+      </Link>
     </Button>
   );
 
   return (
     <React.Fragment>
-      {renderRedirect(redirect)}
+      {/* {renderRedirect(redirect)} */}
 
       <Toolbar className={classes.toolbar}>
         <Typography
@@ -138,41 +150,21 @@ function Header(props) {
           <SearchIcon />
         </IconButton>
 
-        {renderUserPanel(
-          signUpButton,
-
-          props.isLogged,
-          userButton(props.username, props.isAdmin)
-        )}
+        {renderUserPanel()}
       </Toolbar>
 
-      <Button
-        size="small"
-        onClick={() =>
-          setRedirect({
-            about: true,
-            contact: false,
-            register: false,
-            adminpage: false,
-            userpage: false,
-          })
-        }
-      >
-        About
+      <Button size="small">
+        <Link to="/about" style={{ textDecoration: "none", color: "black" }}>
+          {" "}
+          About
+        </Link>
       </Button>
-      <Button
-        size="small"
-        onClick={() =>
-          setRedirect({
-            about: false,
-            contact: true,
-            register: false,
-            adminpage: false,
-            userpage: false,
-          })
-        }
-      >
-        Contact
+
+      <Button size="small">
+        <Link to="/contact" style={{ textDecoration: "none", color: "black" }}>
+          {" "}
+          Contact
+        </Link>
       </Button>
       <Button className={classes.categoryMenu}>
         <HeaderMediaCategory sections={sections} />
@@ -203,5 +195,5 @@ export default connect(
     f_name: state.f_name,
     l_name: state.l_name,
   }),
-  { SET_LOGIN }
+  { SET_LOGIN, SET_LOGOUT }
 )(Header);

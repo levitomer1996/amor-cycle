@@ -252,7 +252,13 @@ export default function Registerpage() {
                   setRedirectToSignIn(true);
                 }}
               >
-                Already have an acount?
+                <Link
+                  to="/signin"
+                  style={{ textDecoration: "none", color: "white" }}
+                >
+                  {" "}
+                  Already have an account?
+                </Link>
               </Button>
             </Grid>
           </Grid>

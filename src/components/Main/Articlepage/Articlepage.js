@@ -3,7 +3,8 @@ import { useStyles } from "./articlepage.module";
 import { useParams } from "react-router-dom";
 import { baseUrl } from "../../../serverURL";
 import { Paper } from "@material-ui/core";
-import ArticleCard from "./Articlecard";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import ArticleCard from "./articleComps/Articlecard";
 
 function Articlepage(props) {
   //Page style.
@@ -17,6 +18,7 @@ function Articlepage(props) {
     isError: false,
     error: "",
   });
+  const [spinner, setSpinner] = useState(false);
 
   function getArticles(category) {
     if (isFetched !== category) {
@@ -40,16 +42,18 @@ function Articlepage(props) {
       return;
     }
   }
-  function renderArticleList() {
-    if (!errorMessage.isError) {
-      // const listItems = articleListState.map((number) => <li>{number}</li>);
-      // return <ul>{listItems}</ul>;
+  function renderSpinner(spinner) {
+    if (!spinner) {
+      return;
+    } else {
+      return <CircularProgress />;
     }
   }
 
   return (
     <div>
       {getArticles(category)}
+      {renderSpinner(spinner)}
       <div>
         <ArticleCard
           time_Created={"Apr 27th 20"}
@@ -62,6 +66,7 @@ function Articlepage(props) {
         {articleListState.map((article) => {
           return (
             <ArticleCard
+              id={article.id}
               time_Created={article.time_Created}
               title={article.title}
               content={article.content}
@@ -72,10 +77,6 @@ function Articlepage(props) {
       </div>
     </div>
   );
-}
-
-function cac(x, y) {
-  return x + y;
 }
 
 export default Articlepage;

@@ -80,6 +80,10 @@ export const useStyles = makeStyles((theme) => ({
     top: "271.875px",
     zIndex: 3,
   },
+  link: {
+    color: "black",
+    textDecoration: "none",
+  },
 }));
 
 export function renderRedirect(redirect) {

@@ -17,17 +17,39 @@ export const useStyles = makeStyles((theme) => ({
     maxWidth: "223px",
   },
   commentContainer: {
-    width: "100%",
+    width: "70%",
+    borderRadius: "7px",
+    backgroundColor: "80808012",
   },
   comments: {
     width: "100%",
-    border: "1px solid black",
+    borderRadius: "7px",
     marginLeft: "1%",
   },
   paper: {
     marginBottom: "1%",
     display: "inline-block",
     backgroundColor: "#0be8082e",
+    overflowWrap: "anywhere",
+  },
+  commentsHeader: {
+    height: "10%",
+    backgroundColor: "#0be8082e",
+    textAlign: "center",
+    fontSize: "large",
+    color: "white",
+  },
+  Commentsbox: {
+    [theme.breakpoints.down("sm")]: {
+      display: "none",
+    },
+    mobileScreenCommentBox: {
+      display: "none",
+      [theme.breakpoints.down("sm")]: {
+        width: "100%",
+        display: "block",
+      },
+    },
   },
 }));
 

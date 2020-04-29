@@ -25,7 +25,7 @@ function AddArticle(props) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: token,
+        Authorization: `Bearer ${sessionStorage.getItem("at")}`,
       },
       body: JSON.stringify(formState),
     })

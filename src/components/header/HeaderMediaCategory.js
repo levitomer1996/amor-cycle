@@ -7,9 +7,8 @@ import Popper from "@material-ui/core/Popper";
 import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
 import { makeStyles } from "@material-ui/core/styles";
-import Link from "@material-ui/core/Link";
-import { Redirect } from "react-router-dom";
-import { render } from "@testing-library/react";
+
+import { Redirect, Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -104,12 +103,11 @@ export default function HeaderMediaCategory(props) {
                       return (
                         <MenuItem
                           onClick={(e) => {
-                            setRedirect({ isRedirect: true, url: sec.url });
+                            // setRedirect({ isRedirect: true, url: sec.url });
                             handleClose(e);
                           }}
                         >
-                          {" "}
-                          {sec.title}
+                          <Link to={sec.url}>{sec.title}</Link>
                         </MenuItem>
                       );
                     })}

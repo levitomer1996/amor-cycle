@@ -6,6 +6,7 @@ import Registerpage from "./Signup_in/Registerpage";
 import Articlepage from "./Articlepage/Articlepage";
 import SignIn from "./Sign_in/Signinpage";
 import Adminpage from "../Administration/AdminPage/Adminpage";
+import ReadArticlePage from "./Articlepage/ReadArticlePage";
 
 function Main(props) {
   return (
@@ -17,6 +18,7 @@ function Main(props) {
         <Route exact path="/ap" component={Adminpage} />
         <Route exact path="/signin" component={SignIn} />
         <Route path="/article/:category" component={Articlepage} />
+        <Route path="/articlepage/:id" component={ReadArticlePage} />
       </Switch>
     </div>
   );

@@ -3,6 +3,8 @@ import logo from "./logo.svg";
 //Material
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
+//Bootstrap
+import "bootstrap/dist/css/bootstrap.min.css";
 
 //Components
 import Header from "./components/header/Header";
