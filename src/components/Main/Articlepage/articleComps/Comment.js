@@ -6,8 +6,7 @@ function Comment(props) {
   return (
     <div>
       <Paper className={classes.paper}>
-        <strong style={{ display: "block" }}>{props.user}:</strong>{" "}
-        {props.content}
+        <strong style={{ display: "block" }}>Random</strong> {props.content}
       </Paper>
     </div>
   );
