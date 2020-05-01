@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     overflowWrap: "anywhere",
-    fontFamily: "Bradley Hand",
+    fontFamily: "Courier New",
   },
   mobileScreenCommentBox: {
     display: "none",
@@ -57,7 +57,9 @@ function ReadArticlePage(props) {
         </div>
         <div className={classes.content}>
           <h1>{articleState.title}</h1>
-          {articleState.content}
+          <strong style={{ fontSize: "20px", fontFamily: "Book Antiqua" }}>
+            {articleState.content}
+          </strong>
         </div>
       </div>
 

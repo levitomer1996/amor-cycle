@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import TextField from "@material-ui/core/TextField";
 import { useStyles } from "../articlepage.module";
 
@@ -11,35 +10,63 @@ import { baseUrl } from "../../../../serverURL";
 import { useParams } from "react-router-dom";
 import { connect } from "react-redux";
 
+//Alert if client is not logged in to his user.
+import MuiAlert from "@material-ui/lab/Alert";
+
 function Commentsbox(props) {
+  function Alert(props) {
+    return (
+      <MuiAlert
+        className={classes.alert}
+        elevation={6}
+        variant="filled"
+        {...props}
+      />
+    );
+  }
+
   const classes = useStyles();
-  const commentsList = [
-    { user: "Tomer", content: "Very good" },
-    { user: "Jesus", content: " God bless you" },
-    { user: "Jesus", content: " God bless you" },
-    {
-      user: "Jesus",
-      content:
-        " kjdfbasfadsbakfndasbjfbdkjasbfkjdasbfjkdasbfkjdsbafkjdasbkfjbadsjfbadsjkfbdjksabfsabfdsabfjkdsbafjkdsbafjkbdsajkfbdskjafbdjksabfjkdasbfksdbajkbkjbfjkdsbkjfdsbfbadkjsbfdjksabfjkdsabfjkadsbjkfbadsjk",
-    },
-  ];
   //New Comment content that will be added.
   const [newComment, setNewComment] = useState("");
   const [comments, setComments] = useState([]);
   const [isFetched, setisFetched] = useState(false);
+  const [isAlert, setIsAlert] = useState(true);
   const { id } = useParams();
 
   async function postComment(content, user) {
-    fetch(`${baseUrl}/comment/post`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${sessionStorage.getItem("at")}`,
-      },
-      body: JSON.stringify({ content: newComment, article: props.id }),
-    })
-      .then((res) => res.json())
-      .then((data) => {});
+    if (!props.isLogged) {
+      setIsAlert(true);
+      setTimeout(() => {
+        setIsAlert(false);
+      }, 4000);
+      return;
+    } else {
+      const { f_name, l_name } = props;
+      const userOwner = `${f_name} ${l_name}`;
+      console.log(userOwner);
+      fetch(`${baseUrl}/comment/post`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${sessionStorage.getItem("at")}`,
+        },
+        body: JSON.stringify({
+          content: newComment,
+          article: props.id,
+          ownerName: `${props.f_name} ${props.l_name}`,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {});
+    }
+  }
+
+  function rednerUserNotLoggedError() {
+    if (isAlert) {
+      return <Alert severity="error">Must be logged in to your user.</Alert>;
+    } else {
+      return;
+    }
   }
 
   function getArticle(id) {
@@ -63,7 +90,7 @@ function Commentsbox(props) {
         <div className={classes.comments}>
           <div style={{ marginLeft: "3%", marginTop: "3%" }}>
             {comments.map((com) => {
-              return <Comment content={com.content} />;
+              return <Comment content={com.content} name={com.ownerName} />;
             })}
 
             <TextField
@@ -74,9 +101,11 @@ function Commentsbox(props) {
                 setNewComment(e.target.value);
               }}
             />
+
             <IconButton onClick={() => postComment(newComment, props.username)}>
               <SendIcon />
             </IconButton>
+            {rednerUserNotLoggedError()}
           </div>
         </div>
       </div>
@@ -88,6 +117,8 @@ export default connect(
   (state) => ({
     isLogged: state.isLogged,
     username: state.username,
+    f_name: state.f_name,
+    l_name: state.l_name,
   }),
   {}
 )(Commentsbox);

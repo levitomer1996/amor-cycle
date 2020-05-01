@@ -35,12 +35,12 @@ export const useStyles = makeStyles((theme) => ({
     lineHeight: 1.2,
     textAlign: "left",
     textShadow: "0px 3px 7px rgba(255, 0, 0, 0.44)",
-    MozTransformStyle:
-      "matrix( 0.75171352840501,-0.04769632083964,0,0.60045175861537,0,0)",
-    WebkitTransform:
-      "matrix( 0.75171352840501,-0.04769632083964,0,0.60045175861537,0,0)",
-    msTransform:
-      "matrix( 0.75171352840501,-0.04769632083964,0,0.60045175861537,0,0)",
+    // MozTransformStyle:
+    //   "matrix( 0.75171352840501,-0.04769632083964,0,0.60045175861537,0,0)",
+    // WebkitTransform:
+    //   "matrix( 0.75171352840501,-0.04769632083964,0,0.60045175861537,0,0)",
+    // msTransform:
+    //   "matrix( 0.75171352840501,-0.04769632083964,0,0.60045175861537,0,0)",
   },
   toolbarSecondary: {
     justifyContent: "space-evenly",

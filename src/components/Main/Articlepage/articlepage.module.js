@@ -39,10 +39,14 @@ export const useStyles = makeStyles((theme) => ({
     fontSize: "large",
     color: "white",
   },
-  Commentsbox: {
+  alert: {
+    width: "20%",
     [theme.breakpoints.down("sm")]: {
-      display: "none",
+      width: "80%",
     },
+  },
+  Commentsbox: {
+    [theme.breakpoints.down("sm")]: {},
     mobileScreenCommentBox: {
       display: "none",
       [theme.breakpoints.down("sm")]: {
