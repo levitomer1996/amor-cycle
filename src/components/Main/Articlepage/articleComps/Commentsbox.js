@@ -30,7 +30,7 @@ function Commentsbox(props) {
   const [newComment, setNewComment] = useState("");
   const [comments, setComments] = useState([]);
   const [isFetched, setisFetched] = useState(false);
-  const [isAlert, setIsAlert] = useState(true);
+  const [isAlert, setIsAlert] = useState(false);
   const { id } = useParams();
 
   async function postComment(content, user) {
