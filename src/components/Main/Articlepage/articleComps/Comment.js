@@ -8,7 +8,23 @@ import IconButton from "@material-ui/core/IconButton";
 
 //redux
 import { connect } from "react-redux";
+import { baseUrl } from "../../../../serverURL";
 function Comment(props) {
+  //delete comment (only admin allowed.)
+  function deleteComment(id) {
+    if (props.isAdmin) {
+      fetch(`${baseUrl}/comment/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${sessionStorage.getItem("at")}`,
+        },
+      }).then((data) => console.log(data));
+    } else {
+      return;
+    }
+  }
+
   const classes = useStyles();
   if (props.isAdmin) {
     return (
@@ -16,7 +32,10 @@ function Comment(props) {
         <Paper className={classes.paper}>
           <div>
             <strong style={{ display: "inline-block" }}>{props.name}</strong>
-            <IconButton style={{ float: "right" }}>
+            <IconButton
+              style={{ float: "right" }}
+              onClick={() => deleteComment(props.id)}
+            >
               <ClearIcon fontSize={"small"} />
             </IconButton>
           </div>
@@ -29,7 +48,7 @@ function Comment(props) {
       <div>
         <Paper className={classes.paper}>
           <div>
-            <strong style={{ display: "inline-block" }}>Random</strong>
+            <strong style={{ display: "inline-block" }}>{props.name}</strong>
           </div>
           {props.content}
         </Paper>

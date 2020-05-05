@@ -53,6 +53,7 @@ export const useStyles = makeStyles((theme) => ({
     display: "none",
     [theme.breakpoints.down("sm")]: {
       display: "inline",
+      zIndex: 1,
     },
   },
   toolbarLink: {
@@ -81,7 +82,7 @@ export const useStyles = makeStyles((theme) => ({
     zIndex: 3,
   },
   link: {
-    color: "black",
+    color: "#000000",
     textDecoration: "none",
   },
 }));

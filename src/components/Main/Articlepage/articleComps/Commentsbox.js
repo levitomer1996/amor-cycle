@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TextField from "@material-ui/core/TextField";
 import { useStyles } from "../articlepage.module";
 
@@ -13,7 +13,17 @@ import { connect } from "react-redux";
 //Alert if client is not logged in to his user.
 import MuiAlert from "@material-ui/lab/Alert";
 
+//socket
+import socketIOClient from "socket.io-client";
+
 function Commentsbox(props) {
+  const [socket, setSocket] = useState("");
+
+  useEffect(() => {
+    //Connect to socket server.
+    setSocket(socketIOClient(baseUrl));
+  }, []);
+
   function Alert(props) {
     return (
       <MuiAlert
@@ -31,6 +41,7 @@ function Commentsbox(props) {
   const [comments, setComments] = useState([]);
   const [isFetched, setisFetched] = useState(false);
   const [isAlert, setIsAlert] = useState(false);
+  const [response, setResponse] = useState("");
   const { id } = useParams();
 
   async function postComment(content, user) {
@@ -43,7 +54,7 @@ function Commentsbox(props) {
     } else {
       const { f_name, l_name } = props;
       const userOwner = `${f_name} ${l_name}`;
-      console.log(userOwner);
+
       fetch(`${baseUrl}/comment/post`, {
         method: "POST",
         headers: {
@@ -57,7 +68,13 @@ function Commentsbox(props) {
         }),
       })
         .then((res) => res.json())
-        .then((data) => {});
+        .then((data) => {
+          socket.emit("msgToServer", newComment);
+
+          socket.on("msgToClient", function (msg) {
+            setComments([...comments, { content: msg, ownerName: userOwner }]);
+          });
+        });
     }
   }
 
@@ -90,7 +107,14 @@ function Commentsbox(props) {
         <div className={classes.comments}>
           <div style={{ marginLeft: "3%", marginTop: "3%" }}>
             {comments.map((com) => {
-              return <Comment content={com.content} name={com.ownerName} />;
+              console.log(com);
+              return (
+                <Comment
+                  content={com.content}
+                  name={com.ownerName}
+                  key={com.id}
+                />
+              );
             })}
 
             <TextField

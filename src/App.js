@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import logo from "./logo.svg";
 //Material
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -17,6 +17,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 import reducer from "./redux/reducers/LoggedUser.reducer";
+import { baseUrl } from "./serverURL";
 const store = createStore(reducer);
 
 function App() {

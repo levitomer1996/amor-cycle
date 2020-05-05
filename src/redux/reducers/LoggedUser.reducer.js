@@ -1,7 +1,7 @@
 const initialState = {
   isLoggedIn: false,
   username: "",
-  isAdmin: true,
+  isAdmin: false,
 };
 
 function reducer(state = initialState, action) {
@@ -16,11 +16,11 @@ function reducer(state = initialState, action) {
         l_name: action.payload[4],
       };
     case "SET_LOGOUT":
-      sessionStorage.removeItem("at");
+      console.log("check");
       return {
         ...state,
         username: "",
-        isLogged: "",
+        isLogged: false,
         isAdmin: false,
         f_name: "",
         l_name: "",

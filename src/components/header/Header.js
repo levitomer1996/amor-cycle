@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import InstagramIcon from "@material-ui/icons/Instagram";
 import HeaderMediaCategory from "./HeaderMediaCategory";
+import AdminButtonMenu from "./UserbuttonMenus/AdminButtonMenu";
 import { Redirect } from "react-router-dom";
 import {
   sections,
@@ -115,18 +116,17 @@ function Header(props) {
   );
 
   const adminButton = (user) => (
-    <Button variant="outlined" size="small">
-      <Link to="/ap" style={{ textDecoration: "none", color: "black" }}>
-        {" "}
-        {user}
-      </Link>
-    </Button>
+    // <Button variant="outlined" size="small">
+    //   <Link to="/ap" style={{ textDecoration: "none", color: "black" }}>
+    //     {" "}
+    //     {user}
+    //   </Link>
+    // </Button>
+    <AdminButtonMenu name={user} />
   );
 
   return (
     <React.Fragment>
-      {/* {renderRedirect(redirect)} */}
-
       <Toolbar className={classes.toolbar}>
         <Typography
           component="h2"

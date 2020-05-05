@@ -17,6 +17,10 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     marginRight: theme.spacing(2),
   },
+  link: {
+    textDecoration: "none",
+    color: "black",
+  },
 }));
 
 export default function HeaderMediaCategory(props) {
@@ -107,7 +111,9 @@ export default function HeaderMediaCategory(props) {
                             handleClose(e);
                           }}
                         >
-                          <Link to={sec.url}>{sec.title}</Link>
+                          <Link to={sec.url} className={classes.link}>
+                            {sec.title}
+                          </Link>
                         </MenuItem>
                       );
                     })}
