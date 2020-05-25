@@ -15,7 +15,7 @@ import { SET_LOGOUT } from "../../../redux/actions/userActions";
 
 function AdminButtonMenu(props) {
   const { SET_LOGOUT } = props;
-  console.log(props);
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const classes = useStyles();
 
@@ -37,6 +37,7 @@ function AdminButtonMenu(props) {
       <Button
         aria-controls="simple-menu"
         aria-haspopup="true"
+        className={classes.userPanelTextColor}
         onClick={handleClick}
       >
         {props.name}

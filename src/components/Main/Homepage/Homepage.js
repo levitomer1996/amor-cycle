@@ -2,8 +2,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-
-import Container from "@material-ui/core/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Container from "react-bootstrap/Container";
+import HomepageFeed from "./comps/HomepageFeed";
 import Mainpost from "./Mainpost";
 
 import { Switch, Route } from "react-router-dom";
@@ -11,6 +13,17 @@ const useStyles = makeStyles((theme) => ({
   markdown: {
     ...theme.typography.body2,
     padding: theme.spacing(3, 0),
+  },
+  root: {
+    [theme.breakpoints.down("sm")]: {
+      display: "none",
+    },
+  },
+  rootMobile: {
+    display: "none",
+    [theme.breakpoints.down("sm")]: {
+      display: "inline-block",
+    },
   },
 }));
 
@@ -27,9 +40,18 @@ export default function Homepage(props) {
 
   return (
     <Container maxWidth="lg">
-      <Grid item xs={12} md={12}>
-        <Mainpost post={post} />
-      </Grid>
+      <div className={classes.root}>
+        <Row>
+          <Col xs={4} style={{ borderRight: "1px solid black" }}></Col>
+          <Col>
+            {" "}
+            <HomepageFeed />
+          </Col>
+        </Row>
+      </div>
+      <div className={classes.rootMobile}>
+        <HomepageFeed />
+      </div>
     </Container>
   );
 }

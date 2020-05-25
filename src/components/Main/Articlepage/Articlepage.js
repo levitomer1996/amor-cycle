@@ -32,6 +32,7 @@ function Articlepage(props) {
             setErrorMessage({ isError: true, error: data.message });
           } else {
             setErrorMessage({ isError: false, error: "" });
+
             setArticleListState(data);
           }
 
@@ -71,6 +72,8 @@ function Articlepage(props) {
               title={article.title}
               content={article.content}
               img={article.img}
+              likes={article.like.length}
+              likesArray={article.like}
             />
           );
         })}

@@ -4,6 +4,7 @@ import { useStyles } from "../articlepage.module";
 
 import SendIcon from "@material-ui/icons/Send";
 import IconButton from "@material-ui/core/IconButton";
+import CommentIcon from "@material-ui/icons/Comment";
 import Comment from "./Comment";
 
 import { baseUrl } from "../../../../serverURL";
@@ -103,7 +104,10 @@ function Commentsbox(props) {
     <React.Fragment>
       {getArticle(id)}
       <div className={classes.Commentsbox}>
-        <div className={classes.commentsHeader}>Comments</div>
+        <div className={classes.commentsHeader}>
+          Comments
+          <CommentIcon fontSize="large" />
+        </div>
         <div className={classes.comments}>
           <div style={{ marginLeft: "3%", marginTop: "3%" }}>
             {comments.map((com) => {

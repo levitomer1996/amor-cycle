@@ -5,7 +5,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
-import Link from "@material-ui/core/Link";
+
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
@@ -16,6 +16,8 @@ import Alert from "@material-ui/lab/Alert";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { baseUrl } from "../../../serverURL";
 import { Redirect } from "react-router-dom";
+
+import { Link } from "react-router-dom";
 //Redux
 import { SET_LOGIN } from "../../../redux/actions/userActions";
 import { connect } from "react-redux";
@@ -80,6 +82,7 @@ function SignIn(props) {
                 return response.text();
               })
               .then((data) => {
+                console.log(data);
                 setSpinnerState(false);
                 let res = JSON.parse(data);
                 if (res.statusCode === 401) {
@@ -103,7 +106,7 @@ function SignIn(props) {
                   }, 3000);
                 } else {
                   sessionStorage.setItem("at", res.accessToken);
-                  SET_LOGIN(formState.email, false, true);
+                  SET_LOGIN(formState.email, false, true, res.f_name);
                   setRedirectState(true);
                 }
               })
@@ -159,13 +162,12 @@ function SignIn(props) {
           </Button>
           <Grid container>
             <Grid item xs></Grid>
-            <Grid item></Grid>
+            <Grid item>
+              <Link to="/signup">Still don't have an account?</Link>
+            </Grid>
           </Grid>
         </form>
       </div>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
     </Container>
   );
 }

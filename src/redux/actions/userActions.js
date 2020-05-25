@@ -1,7 +1,14 @@
-export const SET_LOGIN = (username, isAdmin, isLogged, f_name, l_name) => {
+export const SET_LOGIN = (
+  username,
+  isAdmin,
+  isLogged,
+  f_name,
+  l_name,
+  userId
+) => {
   return {
     type: "SET_LOGIN",
-    payload: [username, isLogged, isAdmin, f_name, l_name],
+    payload: [username, isLogged, isAdmin, f_name, l_name, userId],
   };
 };
 

@@ -8,9 +8,9 @@ import { baseUrl } from "../../serverURL";
 //Header redirects
 
 export const sections = [
-  { title: "Nutrition,", url: "/article/nutrition" },
+  { title: "Nutrition", url: "/article/nutrition" },
   {
-    title: "Sustainability,",
+    title: "Sustainability",
     url: "/article/sustainability",
   },
   {
@@ -26,21 +26,23 @@ export const sections = [
 export const useStyles = makeStyles((theme) => ({
   toolbar: {
     borderBottom: `1px solid ${theme.palette.divider}`,
+    backgroundColor: "#4a7ac3",
+    marginBottom: "1%",
+    [theme.breakpoints.down("sm")]: {
+      display: "none",
+    },
   },
   toolbarTitle: {
     flex: 0.8,
     fontSize: "55px",
-    color: "#14c31b",
+    color: "#ffffff",
     fontFamily: "Lucida Handwriting",
     lineHeight: 1.2,
     textAlign: "left",
     textShadow: "0px 3px 7px rgba(255, 0, 0, 0.44)",
-    // MozTransformStyle:
-    //   "matrix( 0.75171352840501,-0.04769632083964,0,0.60045175861537,0,0)",
-    // WebkitTransform:
-    //   "matrix( 0.75171352840501,-0.04769632083964,0,0.60045175861537,0,0)",
-    // msTransform:
-    //   "matrix( 0.75171352840501,-0.04769632083964,0,0.60045175861537,0,0)",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "45px",
+    },
   },
   toolbarSecondary: {
     justifyContent: "space-evenly",
@@ -84,6 +86,12 @@ export const useStyles = makeStyles((theme) => ({
   link: {
     color: "#000000",
     textDecoration: "none",
+  },
+  userPanelTextColor: {
+    color: "black",
+    [theme.breakpoints.down("sm")]: {
+      color: "white",
+    },
   },
 }));
 

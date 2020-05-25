@@ -29,15 +29,16 @@ export const useStyles = makeStyles((theme) => ({
   paper: {
     marginBottom: "1%",
     display: "inline-block",
-    backgroundColor: "#0be8082e",
+    backgroundColor: "#9c27b026",
     overflowWrap: "anywhere",
   },
   commentsHeader: {
     height: "10%",
-    backgroundColor: "#0be8082e",
+    backgroundColor: "#9c27b0",
     textAlign: "center",
     fontSize: "large",
-    color: "white",
+    borderRadius: "34px",
+    color: "black",
   },
   alert: {
     width: "20%",

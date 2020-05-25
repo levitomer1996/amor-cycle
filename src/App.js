@@ -8,7 +8,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 //Components
 import Header from "./components/header/Header";
+import MobileHeader from "./components/header/MobileHeader";
 import Main from "./components/Main/Main";
+import BottomNavbar from "./components/BottomNavbar/BottomNavbar";
 
 //React Router
 import { BrowserRouter as Router } from "react-router-dom";
@@ -17,6 +19,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 import reducer from "./redux/reducers/LoggedUser.reducer";
+
 import { baseUrl } from "./serverURL";
 const store = createStore(reducer);
 
@@ -26,10 +29,10 @@ function App() {
       <Router>
         <React.Fragment>
           <CssBaseline />
-          <Container maxWidth="lg">
-            <Header title="Amor cycle" />
-            <Main />
-          </Container>
+          <Header title="Amor cycle" />
+          <MobileHeader />
+          <Main />
+          <BottomNavbar />
         </React.Fragment>
       </Router>
     </Provider>

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { baseUrl } from "../../../serverURL";
 import { useParams } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
+import ShareIcon from "@material-ui/icons/Share";
+import IconButton from "@material-ui/core/IconButton";
 import Commentsbox from "./articleComps/Commentsbox";
 
 //Page styles
@@ -56,7 +58,11 @@ function ReadArticlePage(props) {
           <img src={articleState.img} className={classes.img}></img>
         </div>
         <div className={classes.content}>
+          <IconButton style={{ float: "right" }}>
+            <ShareIcon fontSize="inherit" />
+          </IconButton>
           <h1>{articleState.title}</h1>
+
           <strong style={{ fontSize: "20px", fontFamily: "Book Antiqua" }}>
             {articleState.content}
           </strong>

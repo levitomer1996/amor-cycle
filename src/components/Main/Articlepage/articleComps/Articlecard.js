@@ -1,68 +1,122 @@
-import React from "react";
+import React, { Component } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import ForwardIcon from "@material-ui/icons/Forward";
+import Card from "@material-ui/core/Card";
+import CardActionArea from "@material-ui/core/CardActionArea";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardMedia from "@material-ui/core/CardMedia";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
+import FavoriteIcon from "@material-ui/icons/Favorite";
 import IconButton from "@material-ui/core/IconButton";
-import { green } from "@material-ui/core/colors";
-import { Card, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { Icon } from "@material-ui/core";
 
-export const useStyles = makeStyles((theme) => ({
-  card: {
-    marginLeft: "4%",
-    marginBottom: "3%",
-    fontFamily: "roboto",
-    borderRadius: "18px",
-    background: "white",
-    boxShadow: "5px 5px 15px rgba(0,0,0,0.9) ",
-    textAlign: "center",
-    display: "inline-block",
-    [theme.breakpoints.down("sm")]: {
-      gridTemplateColumns: "100%",
-    },
-  },
-  cardImage: {
-    borderTopLeftRadius: "15px",
-    borderTopRightRadius: "15px",
-    backgroundSize: "cover",
-  },
-  img: {
-    height: "190px",
-    width: "286px",
-  },
-  cardText: {
-    margin: "25px",
-  },
-  date: {
-    color: "black",
-    fontSize: "20px",
-  },
-  p: { color: "grey", fontSize: "20px", overflow: "hidden" },
-  read: {
-    float: "right",
-    backgroundColor: "#4CAF50",
-  },
-}));
+import { baseUrl } from "../../../../serverURL";
 
-function Articlecard(props) {
-  const classes = useStyles();
-  return (
-    <Card className={classes.card}>
-      <Card.Img variant="top" src={props.img} className={classes.img} />
-      <Card.Body>
-        <Card.Title>{props.title}</Card.Title>
-        <Card.Text>{props.time_Created}</Card.Text>
-        <Button style={{ background: "#1bcd0f" }}>
-          <Link
-            to={`/articlepage/${props.id}`}
-            style={{ textDecoration: "none", color: "black" }}
-          >
-            Read
-          </Link>
-        </Button>
-      </Card.Body>
-    </Card>
-  );
+import { connect } from "react-redux";
+
+// const useStyles = makeStyles((theme) => ({
+//   root: {
+//     width: "245px",
+//     marginBottom: "2%",
+//     display: "inline-block",
+//     marginLeft: "2%",
+//   },
+//   media: {
+//     height: 140,
+//   },
+// }));
+
+class Articlecard extends Component {
+  state = {
+    isLiked: false,
+    likes: this.props.likes,
+  };
+
+  setLike() {
+    if (!this.state.isLiked) {
+      fetch(`${baseUrl}/like/addlike`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${sessionStorage.getItem("at")}`,
+        },
+        body: JSON.stringify({ article: this.props.id }),
+      })
+        .then((res) => res.json())
+        .then(this.setState({ isLiked: true }), console.log(this.state));
+    }
+  }
+
+  render() {
+    let likeButton;
+    if (!this.props.likesArray) {
+      likeButton = (
+        <IconButton>
+          <FavoriteBorderIcon />
+        </IconButton>
+      );
+    } else {
+      let isExist = this.props.likesArray.some(
+        (obj) => obj.id === this.props.userId
+      );
+      console.log(this.props.likesArray);
+      if (isExist) {
+        likeButton = (
+          <IconButton>
+            <FavoriteIcon style={{ color: "red" }} />
+          </IconButton>
+        );
+      } else {
+        likeButton = (
+          <IconButton onClick={() => this.setLike()}>
+            <FavoriteBorderIcon />
+          </IconButton>
+        );
+      }
+    }
+
+    return (
+      <Card
+        style={{
+          width: "245px",
+          marginBottom: "2%",
+          display: "inline-block",
+          marginLeft: "5%",
+          marginTop: "3%",
+        }}
+      >
+        <CardActionArea>
+          <CardMedia
+            style={{ height: 140 }}
+            image={this.props.img}
+            title={this.props.title}
+          />
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="h2">
+              {this.props.title}
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="p">
+              {this.props.time_Created}
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+        <CardActions>
+          <Button size="small" color="primary">
+            <Link to={`/articlepage/${this.props.id}`}>Read</Link>
+          </Button>
+
+          <strong> {this.props.likes}</strong>
+          {likeButton}
+        </CardActions>
+      </Card>
+    );
+  }
 }
-
-export default Articlecard;
+export default connect(
+  (state) => ({
+    userId: state.userId,
+  }),
+  {}
+)(Articlecard);
