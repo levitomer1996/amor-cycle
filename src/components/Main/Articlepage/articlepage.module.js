@@ -34,7 +34,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   commentsHeader: {
     height: "10%",
-    backgroundColor: "#9c27b0",
+    backgroundColor: "#9c27b066",
     textAlign: "center",
     fontSize: "large",
     borderRadius: "34px",

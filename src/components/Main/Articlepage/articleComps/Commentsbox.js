@@ -14,15 +14,23 @@ import { connect } from "react-redux";
 //Alert if client is not logged in to his user.
 import MuiAlert from "@material-ui/lab/Alert";
 
+//spinner
+import CircularProgress from "@material-ui/core/CircularProgress";
+
 //socket
 import socketIOClient from "socket.io-client";
 
 function Commentsbox(props) {
   const [socket, setSocket] = useState("");
-
+  const [messageInputPlaceHolder, setInputPlaceHolder] = useState("");
   useEffect(() => {
     //Connect to socket server.
     setSocket(socketIOClient(baseUrl));
+    if (props.isLogged) {
+      setInputPlaceHolder("Type Comment here.");
+    } else {
+      setInputPlaceHolder("Must be logged in .");
+    }
   }, []);
 
   function Alert(props) {
@@ -75,6 +83,7 @@ function Commentsbox(props) {
           socket.on("msgToClient", function (msg) {
             setComments([...comments, { content: msg, ownerName: userOwner }]);
           });
+          setNewComment("");
         });
     }
   }
@@ -100,6 +109,13 @@ function Commentsbox(props) {
     }
   }
 
+  const renderSpinner = (fetch) => {
+    if (fetch) {
+      return "none";
+    } else {
+      return "inline-block";
+    }
+  };
   return (
     <React.Fragment>
       {getArticle(id)}
@@ -108,6 +124,15 @@ function Commentsbox(props) {
           Comments
           <CommentIcon fontSize="large" />
         </div>
+        <CircularProgress
+          style={{
+            width: "10%",
+            height: "0%",
+            position: "relative",
+            left: "40%",
+            display: renderSpinner(isFetched),
+          }}
+        />
         <div className={classes.comments}>
           <div style={{ marginLeft: "3%", marginTop: "3%" }}>
             {comments.map((com) => {
@@ -123,16 +148,18 @@ function Commentsbox(props) {
 
             <TextField
               id="standard-basic"
-              label="Type Comment here."
-              placeholder="Type comment here"
+              label={messageInputPlaceHolder}
+              variant="outlined"
+              disabled={!props.isLogged}
+              value={newComment}
               onChange={(e) => {
                 setNewComment(e.target.value);
               }}
             />
-
             <IconButton onClick={() => postComment(newComment, props.username)}>
               <SendIcon />
             </IconButton>
+
             {rednerUserNotLoggedError()}
           </div>
         </div>

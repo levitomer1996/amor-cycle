@@ -5,6 +5,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import ShareIcon from "@material-ui/icons/Share";
 import IconButton from "@material-ui/core/IconButton";
 import Commentsbox from "./articleComps/Commentsbox";
+import { Container } from "react-bootstrap";
+import ShareModal from "./articleComps/ShareModal";
+
+import { Helmet } from "react-helmet";
 
 //Page styles
 const useStyles = makeStyles((theme) => ({
@@ -49,18 +53,33 @@ function ReadArticlePage(props) {
   const { id } = useParams();
   const [articleState, setArticleState] = useState({});
   const [isFetched, setisFetched] = useState(false);
+  const [modalShow, setModalShow] = useState(false);
   const classes = useStyles();
   return (
-    <div>
+    <Container>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>{articleState.title}</title>
+        <meta name={articleState.title} content={articleState.content} />
+      </Helmet>
+      <ShareModal
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        id={articleState.id}
+      />
       <div className={classes.root}>
         {getArticle(id)}
         <div>
           <img src={articleState.img} className={classes.img}></img>
         </div>
         <div className={classes.content}>
-          <IconButton style={{ float: "right" }}>
+          <IconButton
+            style={{ float: "right" }}
+            onClick={() => setModalShow(true)}
+          >
             <ShareIcon fontSize="inherit" />
           </IconButton>
+
           <h1>{articleState.title}</h1>
 
           <strong style={{ fontSize: "20px", fontFamily: "Book Antiqua" }}>
@@ -70,7 +89,7 @@ function ReadArticlePage(props) {
       </div>
 
       <Commentsbox id={articleState.id} comments={articleState.comments} />
-    </div>
+    </Container>
   );
 }
 

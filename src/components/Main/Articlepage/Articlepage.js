@@ -56,14 +56,6 @@ function Articlepage(props) {
       {getArticles(category)}
       {renderSpinner(spinner)}
       <div>
-        <ArticleCard
-          time_Created={"Apr 27th 20"}
-          title={"Sharon article"}
-          content={"Content - fdsafdsjnfkjdasnfkjasdfdsa"}
-          img={
-            "https://addons-media.operacdn.com/media/CACHE/images/themes/05/126105/1.0-rev1/images/d197fa99-897f-46a6-954e-c6f852179897/7eaf8a54a1a9a12b0f383fdb050ae52c.jpg"
-          }
-        />
         {articleListState.map((article) => {
           return (
             <ArticleCard

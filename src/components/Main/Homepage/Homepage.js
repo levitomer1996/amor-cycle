@@ -7,9 +7,10 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import HomepageFeed from "./comps/HomepageFeed";
 import Mainpost from "./Mainpost";
+import HomepageRight from "./HomepageRight";
 
 import { Switch, Route } from "react-router-dom";
-const useStyles = makeStyles((theme) => ({
+export const useStyles = makeStyles((theme) => ({
   markdown: {
     ...theme.typography.body2,
     padding: theme.spacing(3, 0),
@@ -23,6 +24,11 @@ const useStyles = makeStyles((theme) => ({
     display: "none",
     [theme.breakpoints.down("sm")]: {
       display: "inline-block",
+    },
+  },
+  feed: {
+    [theme.breakpoints.down("sm")]: {
+      display: "none",
     },
   },
 }));
@@ -42,10 +48,13 @@ export default function Homepage(props) {
     <Container maxWidth="lg">
       <div className={classes.root}>
         <Row>
-          <Col xs={4} style={{ borderRight: "1px solid black" }}></Col>
-          <Col>
+          <Col xs={8} style={{ borderRight: "1px solid black" }}>
             {" "}
             <HomepageFeed />
+          </Col>
+          <Col>
+            {" "}
+            <HomepageRight />
           </Col>
         </Row>
       </div>

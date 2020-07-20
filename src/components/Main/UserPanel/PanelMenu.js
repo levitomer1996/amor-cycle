@@ -9,6 +9,9 @@ import PersonIcon from "@material-ui/icons/Person";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import MessageIcon from "@material-ui/icons/Message";
 
+//pages
+import Profilepage from "./pages/Profilepage";
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -93,7 +96,7 @@ export default function PanelMenu() {
         />
       </Tabs>
       <TabPanel value={value} index={0}>
-        Profile
+        <Profilepage />
       </TabPanel>
       <TabPanel value={value} index={1}>
         List

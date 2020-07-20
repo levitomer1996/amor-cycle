@@ -1,56 +1,81 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Navbar from "react-bootstrap/Navbar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import SearchIcon from "@material-ui/icons/Search";
-import Typography from "@material-ui/core/Typography";
+import React, { useEffect, useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import { Row, Col } from "react-bootstrap";
+
 import { Link } from "react-router-dom";
-import FacebookIcon from "@material-ui/icons/Facebook";
-import InstagramIcon from "@material-ui/icons/Instagram";
-import HeaderMediaCategory from "./HeaderMediaCategory";
-import AdminButtonMenu from "./UserbuttonMenus/AdminButtonMenu";
+import HeaderMediaCategory from "./HeaderMedia";
+import HeaderUnregisteredUser from "./HeaderUnregisteredUser";
 import UserButtonMenu from "./UserbuttonMenus/UserButtonMenu";
-import MobileHeader from "./MobileHeader";
-import { Redirect } from "react-router-dom";
-import {
-  sections,
-  useStyles,
-  renderRedirect,
-  validateToken,
-} from "./Header.module";
-import "./Header.style.css";
+import AdminButtonMenu from "./UserbuttonMenus/AdminButtonMenu";
+import IconButton from "@material-ui/core/IconButton";
+import PersonIcon from "@material-ui/icons/Person";
 
-import { token } from "../../token";
-
-//redux
 import { connect } from "react-redux";
-import { SET_LOGIN, SET_LOGOUT } from "../../redux/actions/userActions";
-//Server url
+import { SET_LOGIN, SET_LOGOUT } from "./../../redux/actions/userActions";
 import { baseUrl } from "../../serverURL";
-import { Container } from "@material-ui/core";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    marginBottom: "2%",
+    [theme.breakpoints.down("sm")]: {
+      display: "none",
+    },
+  },
+  title: {
+    flex: 0.8,
+    fontSize: "55px",
+    color: "#ffffff",
+    fontFamily: "Lucida Handwriting",
+    lineHeight: 1.2,
+    textAlign: "left",
+    textShadow: "0px 3px 7px rgba(255, 0, 0, 0.44)",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "45px",
+    },
+  },
+  header: { position: "relative" },
+  link: {
+    color: "#8397a0",
+    fontSize: "30px",
+    borderBottom: "0px solid #ffc107",
+    transition: "border-bottom 0.2s",
+    "&:hover": {
+      color: "white",
+      textDecoration: "none",
+      backgroundColor: "#ffffff42",
+      borderBottom: "5px solid #ffc107",
+      borderRadius: "9%",
+    },
+  },
+}));
 
 function Header(props) {
+  //Styles
   const classes = useStyles();
-  //States
-  const { title } = props;
 
-  //Checks if users is logged or not.
+  //states
+  const [isFetched, setIsFetched] = useState({
+    isFetched: false,
+    isError: false,
+  });
+
+  const {
+    SET_LOGIN,
+    SET_LOGOUT,
+    isAdmin,
+    isLogged,
+    f_name,
+    l_name,
+    username,
+  } = props;
+  //Checks if user is logged or not.
   function renderUserPanel() {
     const { SET_LOGIN, SET_LOGOUT } = props;
 
     if (!sessionStorage.getItem("at")) {
       SET_LOGOUT();
-      return (
-        <Button variant="outlined" size="small">
-          <Link to="/signin" style={{ textDecoration: "none", color: "black" }}>
-            Sign-in
-          </Link>
-        </Button>
-      );
+      return <HeaderUnregisteredUser />;
     } else {
       if (!isFetched.isFetched) {
         fetch(`${baseUrl}/auth/validatetoken/${sessionStorage.getItem("at")}`)
@@ -63,14 +88,9 @@ function Header(props) {
               SET_LOGOUT();
               setIsFetched({ isFetched: true, isError: true });
               return (
-                <Button variant="outlined" size="small">
-                  <Link
-                    to="/signup"
-                    style={{ textDecoration: "none", color: "black" }}
-                  >
-                    Sign-up
-                  </Link>
-                </Button>
+                <IconButton>
+                  <PersonIcon fontSize={"large"}></PersonIcon>
+                </IconButton>
               );
             } else {
               SET_LOGIN(
@@ -82,134 +102,60 @@ function Header(props) {
                 data.id
               );
               setIsFetched({ isFetched: true, isError: false });
-              return userButton(data.f_name);
+              return <UserButtonMenu name={f_name} />;
             }
           });
       } else {
         if (!isFetched.isError) {
           if (!props.isAdmin) {
-            return userButton(props.f_name);
+            return <UserButtonMenu name={f_name} />;
           } else {
-            return adminButton(props.f_name);
+            return <AdminButtonMenu name={f_name} />;
           }
         } else {
           return (
-            <Button variant="outlined" size="small">
-              <Link
-                to="/signup"
-                style={{ textDecoration: "none", color: "black" }}
-              >
-                Sign-up
-              </Link>
-            </Button>
+            <IconButton>
+              <PersonIcon fontSize={"large"}></PersonIcon>
+            </IconButton>
           );
         }
       }
     }
   }
 
-  const [isFetched, setIsFetched] = useState({
-    isFetched: false,
-    isError: false,
-  });
-  const [adminRedirect, setAdminRedirect] = useState(false);
-
-  const userButton = (user) => (
-    // <Button variant="outlined" size="small">
-    //   {user.f_name}
-    // </Button>
-    <UserButtonMenu name={user.f_name} />
-  );
-
-  const adminButton = (user) => (
-    // <Button variant="outlined" size="small">
-    //   <Link to="/ap" style={{ textDecoration: "none", color: "black" }}>
-    //     {" "}
-    //     {user}
-    //   </Link>
-    // </Button>
-    <AdminButtonMenu name={user} />
-  );
-
   return (
-    <React.Fragment>
-      <Navbar className={classes.toolbar}>
-        <Container>
-          <Row>
-            <Col xs={12} md={4}>
-              <Navbar.Brand>
-                <Typography
-                  component="h2"
-                  variant="h5"
-                  color="inherit"
-                  align="left"
-                  // noWrap
-                  className={classes.toolbarTitle}
-                >
-                  <Link to="/" className={classes.toolbarTitle}>
-                    {title}
-                  </Link>
-                </Typography>
-              </Navbar.Brand>
-            </Col>
-
-            <Col xs={12} md={8}>
-              <div style={{ float: "right" }}>
-                <div>
-                  <Button>
-                    <Link to="/about" style={{ color: "black" }}>
-                      <strong>About</strong>
-                    </Link>
-                  </Button>
-                  <Button>
-                    <Link to="/contact" style={{ color: "black" }}>
-                      <strong>Contact</strong>
-                    </Link>
-                  </Button>
-                </div>
-                <Button className={classes.categoryMenu}>
-                  <HeaderMediaCategory sections={sections} />
-                </Button>
-                <IconButton>
-                  <FacebookIcon />
-                </IconButton>
-                <IconButton>
-                  <InstagramIcon />
-                </IconButton>
-
-                {renderUserPanel()}
-              </div>
-            </Col>
-          </Row>
-          <Row>
-            <Toolbar
-              component="nav"
-              variant="dense"
-              className={classes.toolbarSecondary}
-            >
-              <Row>
-                {sections.map((section) => (
-                  <Col>
-                    <Button>
-                      <Link to={section.url} style={{ color: "black" }}>
-                        {section.title}
-                      </Link>
-                    </Button>
-                  </Col>
-                ))}
-              </Row>
-            </Toolbar>
-          </Row>
-        </Container>
-      </Navbar>
-    </React.Fragment>
+    <div className={classes.root}>
+      <AppBar className={classes.header}>
+        <Row>
+          <Col xs={4}>
+            <Link to="/" className={classes.title}>
+              {"Amor-Cycle"}
+            </Link>
+          </Col>
+          <Col>
+            <Row>
+              <Col xs={2}>
+                <Link to="/about" className={classes.link}>
+                  About
+                </Link>
+              </Col>
+              <Col xs={2}>
+                <Link to="/contact" className={classes.link}>
+                  Contact
+                </Link>
+              </Col>
+              <Col xs={4}>
+                {" "}
+                <HeaderMediaCategory styless={classes.link} />
+              </Col>
+              {renderUserPanel()}
+            </Row>
+          </Col>
+        </Row>
+      </AppBar>
+    </div>
   );
 }
-
-Header.propTypes = {
-  sections: PropTypes.array,
-  title: PropTypes.string,
-};
 
 export default connect(
   (state) => ({
@@ -220,5 +166,5 @@ export default connect(
     l_name: state.l_name,
     userId: state.userId,
   }),
-  { SET_LOGIN, SET_LOGOUT }
+  { SET_LOGOUT, SET_LOGIN }
 )(Header);

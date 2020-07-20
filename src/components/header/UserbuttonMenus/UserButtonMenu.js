@@ -2,6 +2,7 @@ import React from "react";
 import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import PersonIcon from "@material-ui/icons/Person";
 
 //Styles
 import { useStyles } from "../Header.module";
@@ -34,6 +35,7 @@ function UserButtonMenu(props) {
 
   return (
     <div>
+      <PersonIcon fontSize={"large"} />
       <Button
         aria-controls="simple-menu"
         aria-haspopup="true"

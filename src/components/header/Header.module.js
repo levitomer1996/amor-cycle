@@ -88,10 +88,12 @@ export const useStyles = makeStyles((theme) => ({
     textDecoration: "none",
   },
   userPanelTextColor: {
-    color: "black",
+    color: "white",
     [theme.breakpoints.down("sm")]: {
       color: "white",
     },
+   
+    
   },
 }));
 
